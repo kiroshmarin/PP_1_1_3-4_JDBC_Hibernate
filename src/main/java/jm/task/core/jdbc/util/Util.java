@@ -20,17 +20,24 @@ public class Util {
     }
 
 
-    public static Connection getConnection() throws SQLException, IOException {
-
+    public static Connection getConnection() {
+        Connection connection = null;
         Properties properties = new Properties();
         try (InputStream in = Files.newInputStream(Paths.get("src/main/resources/database.properties"))) {
             properties.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         String url = properties.getProperty("url");
         String username = properties.getProperty("username");
         String password = properties.getProperty("password");
 
-        return DriverManager.getConnection(url, username, password);
+        try {
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 
 }
